@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>triangle-007</title>
+    <link rel="stylesheet" type="text/css" href="triangle-styles.css">
+</head>
+
+<body class="radial-center">
+    <div id="mainContainer" class="mainContainer"></div>
+</body>
+
+<script>
+
+console.log("mio!");
+var container = document.getElementById("mainContainer");
+var content="";
+
+var distancia = function (ax,ay,bx,by){
+    var c1 = bx-ax;
+    var c2 = by-ay;
+    var h = Math.sqrt( c1 * c1 + c2 * c2 ); 
+    //console.log("- Distancia entre P("+ax+","+ay+") y P("+bx+","+by+") es ", h);
+    return h;
+}
+
+var rotatePoint = function (pointX, pointY, originX, originY, angle) {
+    angle = angle * Math.PI / 180.0;
+    return {
+        x: Math.cos(angle) * (pointX-originX) - Math.sin(angle) * (pointY-originY) + originX,
+        y: Math.sin(angle) * (pointX-originX) + Math.cos(angle) * (pointY-originY) + originY
+    };
+}
+
+function drawTriangle(data,bgColor){
+
+    var string = "";
+    
+    var P1x=data.vertices[0].x;
+    var P1y=data.vertices[0].y;
+    var P2x=data.vertices[1].x;
+    var P2y=data.vertices[1].y;
+    var P3x=data.vertices[2].x;
+    var P3y=data.vertices[2].y;
+    console.log("---> draw new triangle. P1("+P1x+","+P1y+"), P2("+P2x+","+P2y+"), P3("+P3x+","+P3y+")");
+
+    //Pintar vertices (bolitas) a modo de plantilla. Pa ver como va el asunto.
+    //------------------------------------------------------------------------
+    for (i=0; i<3; i++){
+        //console.log(i);
+        var a=data.vertices[i].x;
+        var b=data.vertices[i].y;
+        string = string + '<div class="vertex" style="left:'+a+'px; top:'+b+'px; background-color:'+bgColor+'">'+(i*1+1)+'</div>';
+    }
+
+    // Averiguar distancia entre puntos
+    // --------------------------------
+    var c = distancia(P1x, P1y, P2x, P2y);
+    var b = distancia(P1x, P1y, P3x, P3y);
+    var a = distancia(P2x, P2y, P3x, P3y);
+    console.log("c:",c);
+    console.log("b:",b);
+    console.log("a:",a);
+
+
+    // calcular los diferentes Angulos
+    // --------------------------------
+    var A = Math.acos((b*b+c*c-a*a)/(2*b*c));
+    var B = Math.acos((a*a+c*c-b*b)/(2*a*c));
+    var C = Math.acos((a*a+b*b-c*c)/(2*a*b));
+
+    /*
+    console.log("ang A:",A," radianes");
+    console.log("ang B:",B," radianes");
+    console.log("ang C:",C," radianes");
+    */
+
+    var A = A * 180 / Math.PI;
+    var B = B * 180 / Math.PI;
+    var C = C * 180 / Math.PI;
+    console.log("ang A:",A," grados");
+    console.log("ang B:",B," grados");
+    console.log("ang C:",C," grados");
+
+    // Hayar longitudes de Base y Altura
+    // ---------------------------------
+
+    /* 
+    // Hayar altura a partir del area
+    area = base * altura / 2; => altura = 2 * area / base;
+    area = Raiz cuadrada de S*(S-a)*(S-b)*(S-c);
+    sonde 'S' es el semiperimetro. S = (a + b + c)/2;
+    */
+
+    var S = (a + b + c)/2;
+    var area = Math.sqrt( S*(S-a)*(S-b)*(S-c) );
+    var altura = 2 * area / c;
+    console.log("altura: ",altura);
+
+    // The triangle Base
+    var base = c/2;
+
+    // Calcular el giro del triangulo
+    // ------------------------------
+    var cateto1 = P2x-P1x;
+    var cateto2 = P2y-P1y;
+    var radianes = Math.atan(cateto2/cateto1);
+    var figureRotation = radianes * 180 / Math.PI;
+    //console.log("figureRotation:",figureRotation);
+
+    // Hayar cuanto skew aplicar
+    // -------------------------
+    Pmediox = P1x + ((P2x-P1x)/2);
+    Pmedioy = P1y + ((P2y-P1y)/2); 
+    h = distancia(Pmediox, Pmedioy, P3x, P3y);
+
+    /*
+    console.log("Pmediox: ",Pmediox);
+    console.log("Pmedioy: ",Pmedioy);
+    console.log("h: ",h);
+    console.log("base: ",base);
+    */
+
+    var skewAngle = Math.acos((h*h + base*base - a*a)/(2*h*base));
+    var skewAngle = -skewAngle * 180 / Math.PI;
+    var skewAngle = 90 - skewAngle;
+    //console.log("skewAngle:",skewAngle);
+
+    // Establecer el origen de las transformaciones css
+    // ------------------------------------------------
+    var tOriginX = 0;
+    var tOriginY = 0;
+
+    // Traslacion desde origen x hacer skew
+    // ------------------------------------
+    var AnguloTraslacionX = skewAngle;
+    h = h*2;
+    var traslacionX = Math.sqrt( h * h - (altura*2 * altura*2) );
+    var traslacionY = 0;
+
+    /*
+    console.log("traslacionX:", traslacionX);
+    console.log("traslacionY:", traslacionY);
+    */
+    
+    var desplz_x = P1x + traslacionX;
+    var desplz_y = P1y - altura*2 + traslacionY;
+    
+    /*
+    console.log("desplazamientoX: ", desplz_x);
+    console.log("desplazamientoY: ", desplz_y);
+    */
+
+    // Traslacion desde origen x rotacion
+    // ----------------------------------
+    console.log("--- Rotar punto ", figureRotation, " grados");
+    console.log("Punto origen P(",P1x,",",P1y,")");
+    var data = rotatePoint( P1x, P1y, 0, 0, figureRotation);
+    console.log("Punto calculado P(",data.x,",",data.y,")");
+    
+    var desplz_x = desplz_x - (data.x -P1x);
+    var desplz_y = desplz_y - (data.y -P1y);
+    console.log("desplazamientoX: ", desplz_x);
+    console.log("desplazamientoY: ", desplz_y); 
+
+    // Create HTML
+    // -----------
+    string = string + '<div class="triangle" style="'+
+    'border-color: gray black '+ bgColor +';'+ 
+    //'transform-origin: '+ hipotenusa +'px '+ altura*2 +'px 0; '+
+    //'transform-origin: '+ 0 +'px '+ 0 +'px 0; '+
+    'transform-origin: '+ tOriginX +'px '+ tOriginY +'px 0; '+
+    'transform: rotate('+ figureRotation +'deg) '+
+    //'translate('+pos_x+'px, '+ (pos_y*1-altura) +'px) '+
+    //'translate('+pos_x+'px, '+ (pos_y*1) +'px) '+
+    'translate('+desplz_x+'px, '+ (desplz_y*1) +'px) '+
+    'skewX('+ skewAngle +'deg); '+
+    'border-width:'+ altura +'px '+ base +'px;'+
+    '"></div>';
+
+    return string;
+}
+
+var v={"vertices": [{x:0,y:0},{x:50,y:250},{x:200,y:200}]};
+content = content + drawTriangle(v,"#ff2c3a");
+
+var v={"vertices": [{x:400,y:200},{x:750,y:200},{x:600,y:50}]};
+content = content + drawTriangle(v,"#56e133");
+
+var v={"vertices": [{x:250,y:250},{x:650,y:300},{x:600,y:150}]};
+content = content + drawTriangle(v,"#ffbf03"); 
+
+var v={"vertices": [{x:50,y:300},{x:200,y:300},{x:150,y:200}]};
+content = content + drawTriangle(v,"#0000ff"); 
+
+container.innerHTML = content;
+
+</script>
+</html>

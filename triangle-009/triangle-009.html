@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<head>
+    <title>triangle-009</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="triangle-styles.css">
+    <style type="text/css">
+
+        .triangle{
+            background-color: rgba(0, 255, 0, 0.4);
+            border-color: transparent transparent cyan transparent;
+            opacity: 0.7;
+        }
+
+        .selector {
+            background-color: #CCCCCC;
+            border-top: 1px solid #888888;
+            bottom: 0;
+            box-shadow: 0 0 10px #000000;
+            display: block;
+            height: 130px;
+            left: 0;
+            position: absolute;
+            width: 100%;
+            background-image: url("noise.png");
+        }
+        .btnTriangle {
+            background-image: url("triangle.png");
+            background-position: 5px 3px;
+            background-repeat: no-repeat;
+            border: medium none;
+            border-radius: 50px;
+            box-shadow: 0 1px 3px #666666;
+            display: block;
+            float: left;
+            height: 94px;
+            line-height: 27px;
+            margin: 3px;
+            padding: 25px 2px 2px;
+            text-align: center;
+            width: 33px;
+        }
+        .btnVertex {
+            background-color: #FFFFFF;
+            border: medium none;
+            border-radius: 50px;
+            display: block;
+            font-family: helvetica,arial,sans-serif;
+            height: 25px;
+            line-height: 27px;
+            margin: 4px 4px 5px;
+            text-align: center;
+            width: 25px;
+            color: black;
+        }
+        .btnVertex:hover{
+            background-color: #000;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="radial-center">
+    <div id="mainContainer" class="mainContainer"></div>  
+    <div id="panel" class="selector"></div>
+    <div class="miniKeyboard left-keys">
+        <div class="key cursor-up">Up</div><br>
+        <div class="key cursor-right">Right</div>
+        <div class="key cursor-down">Down</div>
+        <div class="key cursor-left">Left</div>
+    </div>
+</body>
+
+<script>
+
+'use strict';
+
+function callkeydownhandler(evnt) {
+   var ev = (evnt) ? evnt : event;
+   var code=(ev.which) ? ev.which : event.keyCode;
+   console.log("El código de la tecla pulsada es: " + code);
+}
+
+if (window.document.addEventListener) {
+   window.document.addEventListener("keydown", callkeydownhandler, false);
+} else {
+   window.document.attachEvent("onkeydown", callkeydownhandler);
+}
+
+var distancia = function (ax,ay,bx,by){
+    var c1 = bx-ax;
+    var c2 = by-ay;
+    var h = Math.sqrt( c1 * c1 + c2 * c2 ); 
+    //console.log("- Distancia entre P("+ax+","+ay+") y P("+bx+","+by+") es ", h);
+    return h;
+};
+
+var rotatePoint = function (pointX, pointY, originX, originY, angle) {
+    angle = angle * Math.PI / 180.0;
+    return {
+        x: Math.cos(angle) * (pointX-originX) - Math.sin(angle) * (pointY-originY) + originX,
+        y: Math.sin(angle) * (pointX-originX) + Math.cos(angle) * (pointY-originY) + originY
+    };
+};
+
+var selectVertex = function(id,vertexNum){
+    console.log("id:"+id+", vertexNum:"+vertexNum);
+};
+
+var drawTriangle = function(data,bgColor,id){
+
+    var string = "";
+    var P1x =data[0].x;
+    var P1y =data[0].y;
+    var P2x =data[1].x;
+    var P2y =data[1].y;
+    var P3x =data[2].x;
+    var P3y =data[2].y;
+    console.log("---> draw new triangle. P1("+P1x+","+P1y+"), P2("+P2x+","+P2y+"), P3("+P3x+","+P3y+")");
+    
+    //Pintar vertices (bolitas) a modo de plantilla. Pa ver como va el asunto.
+    //------------------------------------------------------------------------
+    for (var i=0; i<3; i++){
+        //console.log(i);
+        var a=data[i].x;
+        var b=data[i].y;
+        string = string + '<div class="vertex" style="left:'+a+'px; top:'+b+'px; background-color:'+bgColor+'">'+(i*1+1)+'</div>';
+    }
+
+    //Pintar Manejadores
+    //------------------
+    strPanel = strPanel + 
+    '<div id="tri-'+id+'" class="btnTriangle" style="background-color:'+bgColor+'">'+
+        '<div id="tri-'+id+'-v1" class="btnVertex" onClick="selectVertex('+id+',1)" >1</div>'+
+        '<div id="tri-'+id+'-v2" class="btnVertex" onClick="selectVertex('+id+',2)" >2</div>'+
+        '<div id="tri-'+id+'-v3" class="btnVertex" onClick="selectVertex('+id+',3)" >3</div>'+
+    '</div>';
+    
+    // Averiguar distancia entre puntos
+    // --------------------------------
+    var c = distancia(P1x, P1y, P2x, P2y);
+    var b = distancia(P1x, P1y, P3x, P3y);
+    var a = distancia(P2x, P2y, P3x, P3y);
+    console.log("c:",c);
+    console.log("b:",b);
+    console.log("a:",a);
+
+    // calcular los diferentes Angulos
+    // --------------------------------
+    var A = Math.acos((b*b+c*c-a*a)/(2*b*c));
+    var B = Math.acos((a*a+c*c-b*b)/(2*a*c));
+    var C = Math.acos((a*a+b*b-c*c)/(2*a*b));
+
+    /*
+    console.log("ang A:",A," radianes");
+    console.log("ang B:",B," radianes");
+    console.log("ang C:",C," radianes");
+    */
+
+    var A = A * 180 / Math.PI;
+    var B = B * 180 / Math.PI;
+    var C = C * 180 / Math.PI;
+    console.log("ang A:",A," grados");
+    console.log("ang B:",B," grados");
+    console.log("ang C:",C," grados");
+
+    // Hayar longitudes de Base y Altura
+    // ---------------------------------
+
+    /* 
+    // Hayar altura a partir del area
+    area = base * altura / 2; => altura = 2 * area / base;
+    area = Raiz cuadrada de S*(S-a)*(S-b)*(S-c);
+    sonde 'S' es el semiperimetro. S = (a + b + c)/2;
+    */
+
+    var S = (a + b + c)/2;
+    var area = Math.sqrt( S*(S-a)*(S-b)*(S-c) );
+    var altura = 2 * area / c;
+    console.log("altura: ",altura);
+
+    // The triangle Base
+    var base = c/2;
+
+    // Calcular el giro del triangulo
+    // ------------------------------
+    var cateto1 = P2x-P1x;
+    var cateto2 = P2y-P1y;
+    var radianes = Math.atan(cateto2/cateto1);
+    var figureRotation = radianes * 180 / Math.PI;
+    //console.log("figureRotation:",figureRotation);
+
+    // Hayar cuanto skew aplicar
+    // -------------------------
+    var Pmediox = P1x + ((P2x-P1x)/2);
+    var Pmedioy = P1y + ((P2y-P1y)/2); 
+    var h = distancia(Pmediox, Pmedioy, P3x, P3y);
+
+    /*
+    console.log("Pmediox: ",Pmediox);
+    console.log("Pmedioy: ",Pmedioy);
+    console.log("h: ",h);
+    console.log("base: ",base);
+    */
+
+    var skewAngle = Math.acos((h*h + base*base - a*a)/(2*h*base));
+    var skewAngle = -skewAngle * 180 / Math.PI;
+    var skewAngle = 90 - skewAngle;
+    //var skewAngle = 0; // ! Quitar!!!
+    //console.log("skewAngle:",skewAngle);
+
+    // Establecer el origen de las transformaciones css
+    // ------------------------------------------------
+    var tOriginX = 0;
+    var tOriginY = 0;
+
+    // Traslacion desde origen x hacer skew
+    // ------------------------------------
+
+    var traslacionX = 0;
+    var traslacionY = 0;
+    
+    var AnguloTraslacionX = skewAngle;
+    h = h*2;
+    traslacionX = Math.sqrt( h * h - (altura*2 * altura*2) );
+    traslacionY = 0;
+    
+    /*
+    var traslacionX = 0;
+    var traslacionY = 0;
+    */
+
+    /*
+    console.log("traslacionX:", traslacionX);
+    console.log("traslacionY:", traslacionY);
+    */
+    
+    var desplz_x = P1x + traslacionX;
+    var desplz_y = P1y - altura*2 + traslacionY;
+
+    /*
+    var desplz_x = P1x;
+    var desplz_y = P1y - altura*2;
+    */
+
+    /*
+    console.log("desplazamientoX: ", desplz_x);
+    console.log("desplazamientoY: ", desplz_y);
+    */
+
+    // Traslacion desde origen x rotacion
+    // ---------------------------------- 
+    console.log("--- Rotar punto ", figureRotation, " grados");
+    console.log("Punto origen P(",P1x,",",P1y,")");
+    var datos = rotatePoint( P1x, P1y, 0, 0, figureRotation);
+    console.log("Punto calculado P(",datos.x,",",datos.y,")");
+
+    var desplz_x = desplz_x - (datos.x -P1x);
+    var desplz_y = desplz_y - (datos.y -P1y);
+    console.log("desplazamientoX: ", desplz_x);
+    console.log("desplazamientoY: ", desplz_y); 
+   
+    // Create HTML
+    // -----------
+    string = string + 
+    '<div class="triangle" style="'+
+    'border-color: transparent transparent '+ bgColor +' transparent;'+
+    'transform-origin: '+ tOriginX +'px '+ tOriginY +'px 0; '+
+    'transform: rotate('+ figureRotation +'deg) '+
+    'translate('+desplz_x+'px, '+ (desplz_y*1) +'px) '+
+    'skewX('+ skewAngle +'deg); '+
+    'border-width:'+ altura +'px '+ base +'px;'+
+    '"></div>';
+
+    return string;
+}
+
+var triangles = [
+    {"vertices": [ {x:0,y:0},     {x:50,y:250},  {x:200,y:200} ], "color": "#ff2c3a"},
+    {"vertices": [ {x:350,y:200}, {x:700,y:200}, {x:550,y:50}  ], "color": "#56e133"},
+    {"vertices": [ {x:250,y:250}, {x:650,y:300}, {x:600,y:150} ], "color": "#ffbf03"},
+    {"vertices": [ {x:50,y:300},  {x:200,y:300}, {x:150,y:200} ], "color": "#ff2c3a"},
+    {"vertices": [ {x:50,y:350},  {x:250,y:250}, {x:150,y:50}  ], "color": "#0000ff"},
+    {"vertices": [ {x:400,y:400}, {x:600,y:450}, {x:550,y:250} ], "color": "#ff2c3a"},
+    {"vertices": [ {x:700,y:500}, {x:900,y:400}, {x:800,y:200} ], "color": "#ff2c3a"}
+];
+var strPanel="";
+var content="";
+console.log(triangles.length);
+
+for (var i=0; i<triangles.length; i++){
+    content += drawTriangle( triangles[i].vertices, triangles[i].color, i);
+}
+
+var container = document.getElementById("mainContainer");
+container.innerHTML = content;
+
+var panel = document.getElementById("panel");
+panel.innerHTML = strPanel;
+
+</script>
+</html>

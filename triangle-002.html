@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>triangle-002</title>
+<style type="text/css">
+
+body{
+	overflow: hidden;
+}
+
+.mainContainer {
+    height: 100%;
+    left: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+	overflow: hidden;
+    background-image: url("bg-005.gif");
+}
+
+.vertex {
+    background-color: #FF0000; /* smashed! */
+    border-radius: 5px 5px 5px 5px;
+    font-family: arial;
+    font-size: 11px;
+    font-weight: bold;
+    height: 10px;
+    line-height: 29px;
+    opacity: 0.5;
+    position: absolute;
+    text-indent: 10px;
+    transform: translate(-5px, -5px);
+    width: 10px;
+}
+
+.triangle{
+    background-color: rgba(0, 255, 255, 0.4);
+    border-color: transparent transparent blue; /* smashed! */
+    border-image: none;
+    border-style: none solid solid;
+    border-width: medium 100px 100px;
+    display: block;
+    height: 0;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transform: rotate(0deg) translate(400px, 0px) skewX(0deg);
+    transform-origin: 0 0 0;
+    width: 0;
+}
+
+</style>
+</head>
+
+<body class="radial-center">
+    <div id="mainContainer" class="mainContainer"></div>
+</body>
+
+<script>
+
+console.log("go!");
+var container = document.getElementById("mainContainer");
+var content="";
+
+function drawTriangle(data,bgColor){
+
+    var string = "";
+    
+    var P1x=data.vertices[0].x;
+    var P1y=data.vertices[0].y;
+    var P2x=data.vertices[1].x;
+    var P2y=data.vertices[1].y;
+    var P3x=data.vertices[2].x;
+    var P3y=data.vertices[2].y;
+
+    console.log("---> draw new triangle. P1("+P1x+","+P1y+"), P2("+P2x+","+P2y+"), P3("+P3x+","+P3y+")");
+
+    //Pintar vertices (bolitas) a modo de plantilla. Pa ver como va el asunto.
+    for (i=0; i<3; i++){
+        console.log(i);
+        var a=data.vertices[i].x;
+        var b=data.vertices[i].y;
+        string = string + '<div class="vertex" style="left:'+a+'px; top:'+b+'px; background-color:'+bgColor+'">'+(i*1+1)+'</div>';
+    }
+
+    string = string + '<div class="triangle" style="border-color: transparent transparent '+ bgColor +'; transform: rotate(0deg) translate('+P1x+'px, 0px) skewX(0deg);"></div>';
+    return string;
+}
+
+    var v={"vertices": [{x:0,y:0},{x:200,y:200},{x:50,y:250}]};
+    content = content + drawTriangle(v,"#ff0000"); 
+    var v={"vertices": [{x:750,y:200},{x:400,y:200},{x:600,y:50}]};
+    content = content + drawTriangle(v,"#00ff00"); 
+    container.innerHTML = content;
+
+</script>
+
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>triangle-005</title>
+<style type="text/css">
+
+body{
+	overflow: hidden;
+}
+
+.mainContainer {
+    height: 100%;
+    left: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+	overflow: hidden;
+    background-image: url("bg-005.gif");
+}
+
+.vertex {
+    background-color: #FF0000; /* smashed! */
+    border-radius: 5px 5px 5px 5px;
+    font-family: arial;
+    font-size: 11px;
+    font-weight: bold;
+    height: 10px;
+    line-height: 29px;
+    opacity: 0.8;
+    position: absolute;
+    text-indent: 10px;
+    transform: translate(-5px, -5px);
+    width: 10px;
+}
+
+.triangle{
+    background-color: rgba(0, 255, 255, 0.4);
+    border-color: transparent transparent blue; /* smashed! */
+    border-image: none;
+    border-style: solid;
+    border-width: medium 100px 100px;
+    display: block;
+    height: 0;
+    left: 0;
+    opacity: 0.8;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transform: rotate(0deg) translate(400px, 0px) skewX(0deg);
+    transform-origin: 0 0 0;
+    width: 0;
+}
+
+</style>
+</head>
+
+<body class="radial-center">
+    <div id="mainContainer" class="mainContainer"></div>
+</body>
+
+<script>//<![CDATA[
+
+console.log("mio!");
+var container = document.getElementById("mainContainer");
+var content="";
+
+// This function draws a one pixel simple line. 
+function drawTriangle(data,bgColor){
+
+    var string = "";
+    
+    var P1x=data.vertices[0].x;
+    var P1y=data.vertices[0].y;
+    var P2x=data.vertices[1].x;
+    var P2y=data.vertices[1].y;
+    var P3x=data.vertices[2].x;
+    var P3y=data.vertices[2].y;
+
+    console.log("---> draw new triangle. P1("+P1x+","+P1y+"), P2("+P2x+","+P2y+"), P3("+P3x+","+P3y+")");
+
+    //Pintar vertices (bolitas) a modo de plantilla. Pa ver como va el asunto.
+    for (i=0; i<3; i++){
+        console.log(i);
+        var a=data.vertices[i].x;
+        var b=data.vertices[i].y;
+        string = string + '<div class="vertex" style="left:'+a+'px; top:'+b+'px; background-color:'+bgColor+'">'+(i*1+1)+'</div>';
+    }
+
+    // Calcular altura del triangulo
+    // -----------------------------
+    var altura = 150;
+
+    // Posicionar triangulo en el Punto 1
+    // ----------------------------------
+    pos_x = P1x;
+    pos_y = P1y - altura;
+
+    // Averiguar distancia entre puntos P1 y P2
+    // ----------------------------------------
+    var cateto1 = P2x-P1x;
+    console.log("cateto1:",cateto1);
+
+    var cateto2 = P2y-P1y;
+    console.log("cateto2:",cateto2);
+
+    var hipotenusa = Math.sqrt(cateto1*cateto1+cateto2*cateto2); 
+    console.log("hipotenusa:",hipotenusa);
+
+    // Angulo entre P1 y P2
+    // --------------------
+    console.log("cateto1 = P2x-P1x:",cateto1,"=",P2x,"-",P1x);
+    console.log("cateto1 = P2y-P1y:",cateto2,"=",P2y,"-",P1y);
+    console.log("cateto2/cateto1)=",cateto2/cateto1);
+    var radianes = Math.atan(cateto2/cateto1);
+    var ang1 = radianes * 180 / Math.PI;
+    console.log("ang1:",ang1);
+    ang1 = 0;
+
+
+    //string = string + '<div class="triangle" style="border-color: transparent transparent '+ bgColor +'; transform-origin: '+ P1x +'px '+ P1y +'px 0; transform: rotate('+ ang1 +'deg) translate('+pos_x+'px, '+pos_y+'px) skewX(0deg); border-width:'+ altura +'px '+ hipotenusa/2 +'px;"></div>';
+
+    string = string + '<div class="triangle" style="border-color: gray black '+ bgColor +'; transform-origin: '+ 0 +'px '+ altura*2 +'px 0; transform: rotate('+ ang1 +'deg) translate('+pos_x+'px, '+ (pos_y*1-altura) +'px) skewX(0deg); border-width:'+ altura +'px '+ hipotenusa/2 +'px;"></div>';
+    return string;
+}
+
+/*
+element.style {
+    border-color: transparent transparent #56E133;
+    border-width: 150px 175px;
+    transform: rotate(0deg) translate(750px, -100px) skewX(0deg);
+    transform-origin: 0 300px 0;
+}
+*/
+    //var v={"vertices": [{x:0,y:0},{x:200,y:200},{x:50,y:250}]};
+    var v={"vertices": [{x:0,y:0},{x:50,y:250},{x:200,y:200}]};
+    content = content + drawTriangle(v,"#ff2c3a"); 
+    var v={"vertices": [{x:750,y:200},{x:400,y:200},{x:600,y:50}]};
+    content = content + drawTriangle(v,"#56e133");
+    var v={"vertices": [{x:250,y:250},{x:650,y:300},{x:600,y:150}]};
+    content = content + drawTriangle(v,"#ffbf03"); 
+    container.innerHTML = content;
+
+</script>
+
+
+
+</html>

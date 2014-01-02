@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>triangle-001</title>
+<style type="text/css">
+
+body{
+	overflow: hidden;
+}
+
+.mainContainer {
+    height: 100%;
+    left: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+	overflow: hidden;
+    background-image: url("bg-005.gif");
+}
+
+.a1{
+    background-color: rgba(0, 255, 255, 0.4);
+    border: medium none;
+    display: block;
+    height: 100px;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transform: rotate(20deg) translate(65px, 5px);
+    transform-origin: 65px 5px 0;
+    width: 100px;
+}
+
+.b1{
+    background-color: rgba(255, 255, 0, 0.6);
+    border: medium none;
+    display: block;
+    height: 100px;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transform: skewX(68deg);
+    transform-origin: 0 0 0;
+    width: 100px;
+}
+
+.a2{
+    background-color: rgba(0, 255, 255, 0.4);
+    border: medium none;
+    display: block;
+    height: 100px;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transform: rotate(0deg) translate(300px, 0px) skewX(-45deg);
+    transform-origin: 300px 0px 0;
+    width: 100px;
+}
+
+.b2{
+    background-color: rgba(255, 255, 0, 0.6);
+    border: medium none;
+    display: block;
+    height: 100px;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transform: skewX(68deg);
+    transform-origin: 0 0 0;
+    width: 100px;
+}
+
+.t3{
+    background-color: rgba(0, 255, 255, 0.4);
+    border-color: transparent transparent blue;
+    border-image: none;
+    border-style: none solid solid;
+    border-width: medium 100px 100px;
+    display: block;
+    height: 0;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transform: rotate(0deg) translate(600px, 0px) skewX(0deg);
+    transform-origin: 0 0 0;
+    width: 0;
+}
+
+</style>
+</head>
+
+<body class="radial-center">
+    <div id="mainContainer" class="mainContainer">
+        <div class="a1"><div class="b1"></div></div>
+        <div class="a2"><div class="b2"></div></div>
+        <div class="t3"></div>
+    </div>
+</body>
+
+</html>
