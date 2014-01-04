@@ -1,0 +1,137 @@
+body{
+	overflow: hidden;
+}
+
+.mainContainer {
+    height: 100%;
+    left: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+	overflow: hidden;
+    background-image: url("bg-005.gif");
+}
+
+.vertex {
+    background-color: #FF0000; /* smashed! */
+    border-radius: 5px 5px 5px 5px;
+    font-family: arial;
+    font-size: 11px;
+    font-weight: bold;
+    height: 10px;
+    line-height: 29px;
+    opacity: 0.8;
+    position: absolute;
+    text-indent: 10px;
+    transform: translate(-5px, -5px);
+    width: 10px;
+}
+
+.triangle{
+    background-color: rgba(0, 255, 255, 0.4);
+    border-color: transparent transparent blue; /* smashed! */
+    border-image: none;
+    border-style: solid;
+    border-width: medium 100px 100px;
+    display: block;
+    height: 0;
+    left: 0;
+    opacity: 0.8;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transform: rotate(0deg) translate(400px, 0px) skewX(0deg);
+    transform-origin: 0 0 0;
+    width: 0;
+}
+
+.triangle{
+    background-color: rgba(0, 255, 0, 0.4);
+    border-color: transparent transparent cyan transparent;
+    opacity: 0.7;
+}
+.selector {
+    background-color: #CCCCCC;
+    border-top: 1px solid #888888;
+    bottom: 0;
+    box-shadow: 0 0 10px #000000;
+    display: block;
+    height: 130px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    background-image: url("tools-bg.png");
+}
+.btnTriangle {
+    /*
+    background-image: url("triangle.png");
+    background-position: 2px 2px;
+    background-repeat: no-repeat;
+    */
+    border: medium none;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px #666666;
+    display: block;
+    float: left;
+    height: 94px;
+    line-height: 27px;
+    margin: 6px 0 0 2px;
+    padding: 25px 0 0;
+    text-align: center;
+    width: 30px;
+}
+
+.btnVertex {
+    background-color: #FFFFFF;
+    border: medium none;
+    border-radius: 50px;
+    color: #000000;
+    display: block;
+    font-family: helvetica,arial,sans-serif;
+    font-size: 0.8em;
+    height: 20px;
+    line-height: 22px;
+    margin: 4px 5px;
+    text-align: center;
+    width: 20px;
+}
+.btnVertex:hover{
+    background-color: #000;
+    color: white;
+    cursor: pointer;
+}
+
+#select {
+    background-color: #000000;
+    border: 2px solid #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 0 4px #000000;
+    height: 10px;
+    left: -100px;
+    position: absolute;
+    top: -100px;
+    width: 10px;
+}
+
+.btnPencil{
+    background-image: url("selected.png");
+    background-repeat: no-repeat;
+    bottom: 4px;
+    height: 20px;
+    margin-left: 3px;
+    position: absolute;
+    width: 25px;
+    cursor: pointer;
+}
+
+.btnEnableTriangle{
+    background-image: url("triangle2.png");
+    background-repeat: no-repeat;
+    height: 24px;
+    margin-left: 2px;
+    position: absolute;
+    top: 8px;
+    width: 26px;
+    cursor: pointer;
+}
